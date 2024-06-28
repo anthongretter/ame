@@ -6,7 +6,7 @@
 # filename        trie.py
 # created:        2010-08-01 20:24
 # source uri:     http://iregex.org/blog/trie-in-python.html
-
+import json
 # escape bug fix by fcicq @ 2012.8.19
 # python3 compatible by EricDuminil @ 2017.03.
 
@@ -75,11 +75,12 @@ class Trie():
 
 
 # Example:
-#
-# if __name__ == '__main__':
-#     t = Trie()
-#
-#     for w in ['foobar', 'foobah', 'fooxar', 'foozap', 'fooza']:
-#         t.add(w)
-#     print(t.pattern())
-#     #=> "foo(?:ba[hr]|xar|zap?)"
+
+if __name__ == '__main__':
+    t = Trie()
+
+    for w in ['def', 'if', 'else', 'print', 'for', 'int', 'float', 'string', 'read', 'return', '+', '-', '*', '/', '%', '=', '==', '!=', '>', '<', '>=', '<=', '(', ')', '{', '}', '[', ']', ',', ';']:
+        t.add(w)
+    print(t.pattern())
+    print(json.dumps(t.dump(), indent=4))
+    #=> "foo(?:ba[hr]|xar|zap?)"
