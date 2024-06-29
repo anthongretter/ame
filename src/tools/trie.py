@@ -79,7 +79,8 @@ class Trie():
 if __name__ == '__main__':
     t = Trie()
 
-    for w in ['def', 'if', 'else', 'print', 'for', 'int', 'float', 'string', 'read', 'return', '+', '-', '*', '/', '%', '=', '==', '!=', '>', '<', '>=', '<=', '(', ')', '{', '}', '[', ']', ',', ';']:
+    for w in ['def', 'if', 'else', 'print', 'for', 'int', 'float', 'string', 'read', 'return', '+', '-', '*', '/', '%',
+              '=', '==', '!=', '>', '<', '>=', '<=', '(', ')', '{', '}', '[', ']', ',', ';']:
         t.add(w)
     print(t.pattern())
     print(json.dumps(t.dump(), indent=4))

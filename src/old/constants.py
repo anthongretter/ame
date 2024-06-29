@@ -1,21 +1,20 @@
 import re
 
-RESERVED_WORDS_DIAG: dict = eval("""
-{
+RESERVED_WORDS_DIAG: dict = {
     "d": {
         "e": {
             "f": {
-                "": "DEF"
+                "$": "DEF"
             }
         }
     },
     "i": {
         "f": {
-            "": "IF"
+            "$": "IF"
         },
         "n": {
             "t": {
-                "": "INT"
+                "$": "INT"
             }
         }
     },
@@ -23,7 +22,7 @@ RESERVED_WORDS_DIAG: dict = eval("""
         "l": {
             "s": {
                 "e": {
-                    "": "ELSE"
+                    "$": "ELSE"
                 }
             }
         }
@@ -33,7 +32,7 @@ RESERVED_WORDS_DIAG: dict = eval("""
             "i": {
                 "n": {
                     "t": {
-                        "": "PRINT"
+                        "$": "PRINT"
                     }
                 }
             }
@@ -42,14 +41,14 @@ RESERVED_WORDS_DIAG: dict = eval("""
     "f": {
         "o": {
             "r": {
-                "": "FOR"
+                "$": "FOR"
             }
         },
         "l": {
             "o": {
                 "a": {
                     "t": {
-                        "": "FLOAT"
+                        "$": "FLOAT"
                     }
                 }
             }
@@ -61,7 +60,7 @@ RESERVED_WORDS_DIAG: dict = eval("""
                 "i": {
                     "n": {
                         "g": {
-                            "": "STRING"
+                            "$": "STRING"
                         }
                     }
                 }
@@ -72,14 +71,14 @@ RESERVED_WORDS_DIAG: dict = eval("""
         "e": {
             "a": {
                 "d": {
-                    "": "READ"
+                    "$": "READ"
                 }
             },
             "t": {
                 "u": {
                     "r": {
                         "n": {
-                            "": "RETURN"
+                            "$": "RETURN"
                         }
                     }
                 }
@@ -87,96 +86,71 @@ RESERVED_WORDS_DIAG: dict = eval("""
         }
     },
     "+": {
-        "": "PLUS"
+        "$": "PLUS"
     },
     "-": {
-        "": "MINUS"
+        "$": "MINUS"
     },
     "*": {
-        "": "TIMES"
+        "$": "TIMES"
     },
     "/": {
-        "": "DIVIDE"
+        "$": "DIVIDE"
     },
     "%": {
-        "": "MOD"
+        "$": "MOD"
     },
     "=": {
-        "": "ASSIGN",
+        "$": "ASSIGN",
         "=": {
-            "": "EQUAL"
+            "$": "EQUAL"
         }
     },
     "!": {
         "=": {
-            "": "DIFF"
+            "$": "DIFF"
         }
     },
     ">": {
-        "": "GREATER",
+        "$": "GREATER",
         "=": {
-            "": "GREATEREQUAL"
+            "$": "GREATEREQUAL"
         }
     },
     "<": {
-        "": "LESS",
+        "$": "LESS",
         "=": {
-            "": "LESSEQUAL"
+            "$": "LESSEQUAL"
         }
     },
     "(": {
-        "": "LPAREN"
+        "$": "LPAREN"
     },
     ")": {
-        "": "RPAREN"
+        "$": "RPAREN"
     },
     "{": {
-        "": "LBRACE"
+        "$": "LBRACE"
     },
     "}": {
-        "": "RBRACE"
+        "$": "RBRACE"
     },
     "[": {
-        "": "LBRACKET"
+        "$": "LBRACKET"
     },
     "]": {
-        "": "RBRACKET"
+        "$": "RBRACKET"
     },
     ",": {
-        "": "COMMA"
+        "$": "COMMA"
     },
     ";": {
-        "": "SEMICOLON"
-    },
-    '"': {
-        "*": {
-            '"': {
-                "": "STRING_CONSTANT"
-            }
-        }
-    }
-    "'": {
-        "*": {
-            "'": {
-                "": "STRING_CONSTANT"
-            }
-        }
-    }
-    "DIGIT": {
-        "DIGIT*": {
-            ".": {
-                "DIGIT*": {
-                    "": "FLOAT_CONSTANT"
-                }
-            }
-            "": "INT_CONSTANT" 
-        }
+        "$": "SEMICOLON"
     }
 }
-""")
 
 SEPS = {'+', '-', '*', '/', '%', '=', '==', '!=', '>', '<', '>=', '<=',
-        '(', ')', '{', '}', '[', ']', ',', ';', ' ', '\n'}
+        '(', ')', '{', '}', '[', ']', ',', ';'}
 #
 # PALAVRAS_RESERVADAS = ['def', 'if', 'else', 'print', 'for', 'int', 'float', 'string', 'read', 'return']
 # OPERADORES = ['+', '-', '*', '/', '%', '=', '==', '!=', '>', '<', '>=', '<=']
