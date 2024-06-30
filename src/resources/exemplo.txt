@@ -1,5 +1,7 @@
 def f(int x) {
-    if x < 0
+    if (x < 0) {
         x = -x;
+    };
+    call f(1);
     return;
 }

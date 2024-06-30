@@ -11,7 +11,8 @@ reserved = {
     'float': "FLOAT",
     'string': "STRING",
     'read': "READ",
-    'return': "RETURN"
+    'return': "RETURN",
+    'call': "CALL"
 }
 
 tokens = (
