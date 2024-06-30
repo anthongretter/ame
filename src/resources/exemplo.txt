@@ -2,6 +2,7 @@ def f(int x) {
     if (x < 0) {
         x = -x;
     };
-    call f(1);
-    return;
+    y = 1;
+    x = call f(y);
+    return x;
 }

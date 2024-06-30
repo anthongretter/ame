@@ -17,6 +17,13 @@ RESERVED_WORDS_DIAG: dict = {
             }
         }
     },
+    "n": {
+        "e": {
+            "w": {
+                "$": "NEW"
+            }
+        }
+    },
     "i": {
         "f": {
             "$": "IF"
@@ -168,6 +175,6 @@ SEPS = {'+', '-', '*', '/', '%', '=', '==', '!=', '>', '<', '>=', '<=',
 
 
 STRING_CONSTANT = re.compile(r"'(?:[^'\\]|\\.)*'|\"(?:[^\"\\]|\\.)*\"")
-FLOAT_CONSTANT = re.compile(r'[+-]?\d*\.\d*')
-INT_CONSTANT = re.compile(r'[+-]?\d*')
-IDENT = re.compile(r'[^\W0-9]\w*')
+FLOAT_CONSTANT = re.compile(r'[+-]?\d+\.\d+')
+INT_CONSTANT = re.compile(r'[+-]?\d+')
+IDENT = re.compile(r'[^\W0-9]\w+')

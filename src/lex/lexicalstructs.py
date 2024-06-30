@@ -42,7 +42,7 @@ class Lexer:
             tok = lexer.token()
 
             if not tok: break
-            elif tok.type == "ID":
+            elif tok.type == "IDENT":
                 if not tok in symtable:
                     symtable.add(IdLex(None, tok.value, tok.lineno, tok.lexpos))
 

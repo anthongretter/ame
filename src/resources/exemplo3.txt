@@ -1,0 +1,125 @@
+def initialize_airplane_system(int n_seats, string name)
+{
+    string airplane_name;
+    int max_seats;
+
+    int free_seats_counter;
+    int max_seats_counter;
+    string reserved_seats;
+    string suggestion_list;
+    airplane_name = name;
+    max_seats = n_seats;
+    reserved_seats = new string[max_seats][max_seats];
+    max_seats_counter = max_seats * max_seats;
+    free_seats_counter = max_seats * max_seats;
+    suggestion_list = new string[4];
+    int i;
+    int j;
+    for (i = 0; i<max_seats;i = i + 1){
+        for (j = 0; j<max_seats;j = j + 1){
+            reserved_seats[i][j] = "free";
+        };
+    };
+
+    print "Welcome to " ;
+    print airplane_name ;
+    print " seats system!" ;
+    return batata;
+}
+
+def airplane_status()
+{
+    string airplane_name;
+    int max_seats;
+
+    int free_seats_counter;
+    int max_seats_counter;
+    string reserved_seats;
+    string suggestion_list;
+    print "Total seats: " ;
+    print airplane_name ;
+    print "Number of free seats: " ;
+    print free_seats_counter ;
+    print "Number of occupied seats: " ;
+    print reserved_seats ;
+    return batata;
+}
+
+def suggest_another_seat(int i, int j)
+{
+    string airplane_name;
+    int max_seats;
+
+    int free_seats_counter;
+    int max_seats_counter;
+    string reserved_seats;
+    string suggestion_list;
+
+    int k;
+    for (k=0; k < 4; k = k + 1){
+        suggestion_list[k] = "";
+    };
+
+    if (i + 1 < max_seats){
+        if (reserved_seats[i + 1][j] == "free"){
+        suggestion_list[0] = i + j;
+        };
+    };
+    if (j + 1 < max_seats){
+        if (reserved_seats[i][j + 1] == "free"){
+        suggestion_list[1] = i + j;
+        };
+    };
+    if (i - 1 >= 0){
+        if (reserved_seats[i - 1][j] == "free"){
+        suggestion_list[2] = i + j;
+        };
+    };
+    if (j - 1 >= 0){
+        if (reserved_seats[i][j - 1] == "free"){
+        suggestion_list[3] = i + j;
+        };
+    };
+
+    print "Here are some free seats suggestions near from that one:" ;
+    for (k = 0; k < 4; k = k + 1){
+        print suggestion_list;
+    };
+    return batata;
+}
+
+def reserve_seat(int i, int j, string person_id)
+{
+    string airplane_name;
+    int max_seats;
+
+    int free_seats_counter;
+    int max_seats_counter;
+    string reserved_seats;
+    string suggestion_list;
+    if (reserved_seats[i][j] == "free"){
+        reserved_seats[i][j] = person_id;
+        free_seats_counter = free_seats_counter - 1;
+    };
+    return batata;
+}
+
+def free_seat(int i, int j)
+{
+    string airplane_name;
+    int max_seats;
+
+    int free_seats_counter;
+    int max_seats_counter;
+    string reserved_seats;
+    string suggestion_list;
+
+    reserved_seats[i][j] = "free";
+    free_seats_counter = free_seats_counter + 1;
+    print "Seat " ;
+    print i ;
+    print "," ;
+    print j ;
+    print " is free" ;
+    return batata;
+}

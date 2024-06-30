@@ -12,7 +12,8 @@ reserved = {
     'string': "STRING",
     'read': "READ",
     'return': "RETURN",
-    'call': "CALL"
+    'call': "CALL",
+    'new': "NEW",
 }
 
 tokens = (
@@ -35,11 +36,11 @@ tokens = (
     'LBRACKET',
     'RBRACKET',
     'COMMA',
-    'SEMICOLON',
+    'SEMICOLUMN',
     'INT_CONSTANT',
     'STRING_CONSTANT',
     'FLOAT_CONSTANT',
-    'ID'
+    'IDENT'
 ) + tuple(reserved.values())
 
 t_PLUS = r'\+'
@@ -51,7 +52,7 @@ t_RPAREN = r'\)'
 t_LBRACKET = r'\['
 t_RBRACKET = r'\]'
 t_COMMA = r'\,'
-t_SEMICOLON = r'\;'
+t_SEMICOLUMN = r'\;'
 t_LBRACE = r'\{'
 t_RBRACE = r'\}'
 t_LESS = r'<'
@@ -74,10 +75,9 @@ def t_INT_CONSTANT(t):
 
 
 def t_FLOAT_CONSTANT(t):
-    r'[+-]?\d+\.\d+'
+    r'[+-]?\d+\.\d*'
     t.value = float(t.value)
     return t
-
 
 def t_STRING_CONSTANT(t):
     r"'(?:[^'\\]|\\.)*'|\"(?:[^\"\\]|\\.)*\""
@@ -85,9 +85,9 @@ def t_STRING_CONSTANT(t):
     return t
 
 
-def t_ID(t):
+def t_IDENT(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value, 'ID')
+    t.type = reserved.get(t.value, 'IDENT')
     return t
 
 
@@ -97,7 +97,7 @@ def t_newline(t):
 
 
 def t_error(t):
-    print(f"Caractere {t.value[0]} desconhecido em {t.lexer.lineno},{t.lexer.col_offset}")
+    print(f"Caractere {t.value[0]} desconhecido em {t.lexer.lineno},{t.lexer.lexpos}")
 
 
 lexer = lex.lex()
