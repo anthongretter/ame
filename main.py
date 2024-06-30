@@ -1,10 +1,8 @@
-from src.lex.symboltable import SymbolTable
+from src.lex.lexicalstructs import Lexer, SymbolTable
 
 
 if __name__ == "__main__":
-    symbol_table = SymbolTable()
-
     with open('src/resources/exemplo.txt', 'r') as exemplo:
-        symbol_table.populate(exemplo.read())
+        tokens, symbol_table = Lexer.read(exemplo.read())
 
-    print(symbol_table)
+    print(SymbolTable())
