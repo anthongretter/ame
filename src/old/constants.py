@@ -8,6 +8,15 @@ RESERVED_WORDS_DIAG: dict = {
             }
         }
     },
+    "c": {
+        "a": {
+            "l": {
+                "l": {
+                    "$": "CALL"
+                }
+            }
+        }
+    },
     "i": {
         "f": {
             "$": "IF"
