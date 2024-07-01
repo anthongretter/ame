@@ -1,38 +1,62 @@
 ATRIBSTAT -> LVALUE assign ATRIBSTATSUF
 ATRIBSTATSUF -> EXPRESSION
 EXPRESSION -> NUMEXPRESSION EXAUX                   EXAUX.left = NUMEXPRESSION.node
+
 NUMEXPRESSION -> TERM NUMAUX                        NUMAUX.left = TERM.node ;
                                                     NUMEXPRESSION.node = NUMAUX.node
+
 TERM -> UNARYEXPR TERMSUF                           TERMSUF.left = UNARYEXPR.node ;
                                                     TERM.node = TERMSUF.node
-NUMAUX -> plus TERM NUMAUXSUF                       NUMAUXSUF.left = TERM.node      !! REVER
+
+NUMAUX -> plus TERM NUMAUXSUF                       NUMAUXSUF.left = TERM.node
                                                     NUMAUX.node = newnode(plus.vallex, NUMAUX.left, NUMAUXSUF.node)
-NUMAUX -> minus TERM NUMAUXSUF
+
+NUMAUX -> minus TERM NUMAUXSUF                      NUMAUXSUF.left = TERM.node
+                                                    NUMAUX.node = newnode(minus.vallex, NUMAUX.left, NUMAUXSUF.node)
+
 NUMAUX -> &                                         NUMAUX.node = NUMAUX.left
+
 NUMAUXSUF -> NUMAUX                                 NUMAUXSUF.node = NUMAUX.node
+
 NUMAUXSUF -> &                                      NUMAUXSUF.node = NUMAUXSUF.left
+
 UNARYEXPR -> plus FACTOR                            UNARYEXPR.node = FACTOR.node
+
 UNARYEXPR -> minus FACTOR                           UNARYEXPR.node = FACTOR.node
+
 UNARYEXPR -> FACTOR                                 UNARYEXPR.node = FACTOR.node
+
 TERMSUF -> times UNARYEXPR                          TERMSUF.node = newnode(times.vallex, TERMSUF.left, UNARYEXPR.node)
+
 TERMSUF -> divide UNARYEXPR                         TERMSUF.node = newnode(divide.vallex, TERMSUF.left, UNARYEXPR.node)
+
 TERMSUF -> mod UNARYEXPR                            TERMSUF.node = newnode(mod.vallex, TERMSUF.left, UNARYEXPR.node)
+
 TERMSUF -> &                                        TERMSUF.node = TERMSUF.left
+
 FACTOR -> int_constant                              FACTOR.node = newnode(int_constant.vallex, _, _)
+
 FACTOR -> float_constant                            FACTOR.node = newnode(float_constant.vallex, _, _)
+
 FACTOR -> string_constant                           FACTOR.node = newnode(string_constant.vallex, _, _)
+
 FACTOR -> null                                      FACTOR.node = newnode(null.vallex, _, _)
+
 FACTOR -> LVALUE                                    FACTOR.node = LVALUE.node
-FACTOR -> lparen NUMEXPRESSION rparen
+
+FACTOR -> lparen NUMEXPRESSION rparen               FACTOR.node = NUMEXPRESSION.node
+
 LVALUE -> ident LVAUX                               LVALUE.node = newnode(ident.vallex, _, _)
-LVAUX -> lbracket NUMEXPRESSION rbracket LVAUXSUF
+
+LVAUX -> lbracket NUMEXPRESSION rbracket LVAUXSUF   ??
 LVAUX -> &
 LVAUXSUF -> LVAUX
 LVAUXSUF -> &
+
 EXAUX -> less NUMEXPRESSION                         EXAUX.node = newnode(less.vallex, EXAUX.left, NUMEXPRESSION.node)
-EXAUX -> greater NUMEXPRESSION
-EXAUX -> lessequal NUMEXPRESSION
-EXAUX -> greaterequal NUMEXPRESSION
-EXAUX -> equal NUMEXPRESSION
-EXAUX -> diff NUMEXPRESSION
+EXAUX -> greater NUMEXPRESSION                      EXAUX.node = newnode(greater.vallex, EXAUX.left, NUMEXPRESSION.node)
+EXAUX -> lessequal NUMEXPRESSION                    EXAUX.node = newnode(lessequal.vallex, EXAUX.left, NUMEXPRESSION.node)
+EXAUX -> greaterequal NUMEXPRESSION                 EXAUX.node = newnode(greaterequal.vallex, EXAUX.left, NUMEXPRESSION.node)
+EXAUX -> equal NUMEXPRESSION                        EXAUX.node = newnode(equal.vallex, EXAUX.left, NUMEXPRESSION.node)
+EXAUX -> diff NUMEXPRESSION                         EXAUX.node = newnode(diff.vallex, EXAUX.left, NUMEXPRESSION.node)
 EXAUX -> &                                          EXAUX.node = EXAUX.left
