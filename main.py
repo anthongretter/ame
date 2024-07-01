@@ -17,7 +17,7 @@ if __name__ == "__main__":
     # print(symbol_table)
     
     maquina = Syntaxer(tokens, TABELA)
-    # print(maquina)
+    print(maquina)
     res = maquina.analise()
     if res == ResultadoAnalise.SUCESSO:
         print('Análise sintática concluída com sucesso')

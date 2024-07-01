@@ -69,15 +69,16 @@ t_ignore = ' \t'
 t_ignore_COMMENT = r'\#.*'
 
 def t_INT_CONSTANT(t):
-    r'[+-]?\d+'
+    r'[-]?\d+'
     t.value = int(t.value)
     return t
 
 
 def t_FLOAT_CONSTANT(t):
-    r'[+-]?\d+\.\d*'
+    r'[-]?\d+\.\d*'
     t.value = float(t.value)
     return t
+
 
 def t_STRING_CONSTANT(t):
     r"'(?:[^'\\]|\\.)*'|\"(?:[^\"\\]|\\.)*\""
