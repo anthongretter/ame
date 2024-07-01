@@ -1,0 +1,13 @@
+STATEMENT -> VARDECL semicolumn
+VARDECL -> int ident DECAUX                             addtype(index(ident.vallex), int.vallex) ;
+                                                        addmag(index(indent.vallex), DECAUX.magnitude)
+
+VARDECL -> float ident DECAUX                           addtype(index(ident.vallex), float.vallex) ;
+                                                        addmag(index(indent.vallex), DECAUX.magnitude)
+
+VARDECL -> string ident DECAUX                          addtype(index(ident.vallex), string.vallex) ;
+                                                        addmag(index(indent.vallex), DECAUX.magnitude)
+
+DECAUX -> lbracket int_constant rbracket DECAUX(1)      DECAUX.magnitude = DECAUX(1).magnitude + 1 ;
+
+DECAUX -> &                                             DECAUX.magnitude = 0
