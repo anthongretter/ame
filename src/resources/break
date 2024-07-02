@@ -1,0 +1,8 @@
+# Criar uma pilha chamada "loopStack" p/ armazenar os labels de fim de loops
+# Presumindo que já existe um for.prox na geração de codigo intermediario, da pra reutilizar-lo aqui para GCI
+FORSTAT -> for lparen ATRIBSTAT semicolumn EXPRESSION semicolumn ATRIBSTAT rparen {a} STATEMENT {b}
+a = loopStack.push(for.prox) # nao precisa ser for.prox p/ sintatica, mas ja aceleraria a gci
+b = loopStack.pop() # Se falhar, erro de sintaxe (nao tem fechamento de loop)
+STATEMENT -> break semicolumn {c}
+c = loopStack.peek() # Se falhar, erro semantico (break fora de loop)
+
