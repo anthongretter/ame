@@ -1,6 +1,10 @@
 from ply.lex import LexToken
 from enum import Enum
 
+from src.semantic.actions import SemanticAction
+from src.utils import Singleton
+
+
 class ResultadoAnalise(Enum):
     ERRO_TERMINAL = 0
     ERRO_NAO_TERMINAL = 1
@@ -9,11 +13,7 @@ class ResultadoAnalise(Enum):
 class NaoTerminal:
     def __init__(self, nome):
         self.nome = nome
-        self.val = 0
-        self.p = 0
-        self.i = 0
-        self.s = 0 #novo atributo
-        # self.ação = False
+        self.attrs = {}
 
     def __str__(self):
         return f'NT({self.nome})'
@@ -38,16 +38,16 @@ class Terminal:
 #         self.parâmetros = lista_parâmetros
 #         # self.ação = True
 
-class Syntaxer:
+class Syntaxer(metaclass=Singleton):
     def __init__(self, entrada: list[LexToken], tabela: dict[str, dict[str, tuple]]):
         self.pilha = [] # a pilha possui objetos do tipo NaoTerminal, Terminal e AcaoSemantica
         self.entrada = entrada # a entrada possui objetos do tipo LexToken
         self.tabela = {}
         fim_de_entrada = LexToken()
-        LexToken.type = '$'
-        LexToken.value = '$'
-        LexToken.lineno = -1
-        LexToken.lexpos = -1
+        fim_de_entrada.type = '$'
+        fim_de_entrada.value = '$'
+        fim_de_entrada.lineno = -1
+        fim_de_entrada.lexpos = -1
         self.entrada.append(fim_de_entrada)
         self.pilha.append(Terminal('$'))
         self.pilha.append(NaoTerminal('PROGRAM'))
@@ -65,6 +65,20 @@ class Syntaxer:
                 for i in tabela_ll1[cabeça][cauda]:
                     if i == '-':
                         pass
+                    elif callable(i):
+                        continue
+                        # FIXME: precisa da cabeça como NaoTerminal para incluir na ação
+                        # FIXME: precisa da produção inteira como entrada nas ações
+                        #
+                        #        exemplo:
+                        #               T -> F {a}B
+                        #                       ^
+                        #               Se a ação estiver aqui, só vai dar para passar oq ja foi
+                        #               criado como parametro (tudo a esquerda)
+                        #               Daria para percorrer tudo de novo para setar todas ações, mas
+                        #               n sei né, oq acham?
+                        #
+                        # tabela[cabeça][cauda].append(SemanticAction(i, tabela[cabeça][cauda]))
                     elif i.isupper():
                         tabela[cabeça][cauda].append(NaoTerminal(i))
                     else:
@@ -134,7 +148,8 @@ class Syntaxer:
                 else:
                     print(f'Erro ao ler o token {a.value} na linha {a.lineno} e coluna {a.lexpos}! (NaoTerminal)')
                     return ResultadoAnalise.ERRO_NAO_TERMINAL
-            # TODO: elif isinstance(X, AcaoSemantica):
+            elif isinstance(X, SemanticAction):
+                X.execute()
             else:
                 raise Exception(f'Erro (OBJETO NA PILHA NÃO RECONHECIDO) {X}')
         

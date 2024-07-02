@@ -1,13 +1,13 @@
 STATEMENT -> VARDECL semicolumn
-VARDECL -> int ident DECAUX                             addtype(index(ident.vallex), int.vallex) (a) (sint) ;         VARDECL -> int ident DECAUX{a}{b}
-                                                        addmag(index(indent.vallex), DECAUX.magnitude) (b) (sint)                      
+VARDECL -> int ident DECAUX                             addtype(ident.vallex, int.vallex) (a) (sint) ;           VARDECL -> int ident DECAUX{a}{b}
+                                                        addmag(indent.vallex, DECAUX.magnitude) (b) (sint)
 
-VARDECL -> float ident DECAUX                           addtype(index(ident.vallex), float.vallex) (c) (sint) ;       VARDECL -> float ident DECAUX{c}{d}
-                                                        addmag(index(indent.vallex), DECAUX.magnitude) (d) (sint)
+VARDECL -> float ident DECAUX                           addtype(ident.vallex, float.vallex) (c) (sint) ;         VARDECL -> float ident DECAUX{c}{d}
+                                                        addmag(indent.vallex, DECAUX.magnitude) (d) (sint)
 
-VARDECL -> string ident DECAUX                          addtype(index(ident.vallex), string.vallex) (e) (sint) ;      VARDECL -> string ident DECAUX{e}{f}
-                                                        addmag(index(indent.vallex), DECAUX.magnitude) (f) (sint)
+VARDECL -> string ident DECAUX                          addtype(ident.vallex, string.vallex) (e) (sint) ;        VARDECL -> string ident DECAUX{e}{f}
+                                                        addmag(indent.vallex, DECAUX.magnitude) (f) (sint)
 
-DECAUX -> lbracket int_constant rbracket DECAUX(1)      DECAUX.magnitude = DECAUX(1).magnitude + 1 (g) (sint) ;       DECAUX -> lbracket int_constant rbracket DECAUX(1){g}
+DECAUX -> lbracket int_constant rbracket DECAUX(1)      DECAUX.magnitude = DECAUX(1).magnitude + 1 (g) (sint) ;  DECAUX -> lbracket int_constant rbracket DECAUX(1){g}
 
-DECAUX -> &                                             DECAUX.magnitude = 0 (h) (sint)                               DECAUX -> &{h}
+DECAUX -> &                                             DECAUX.magnitude = 0 (h) (sint)                          DECAUX -> &{h}
