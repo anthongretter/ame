@@ -1,62 +1,62 @@
 ATRIBSTAT -> LVALUE assign ATRIBSTATSUF
 ATRIBSTATSUF -> EXPRESSION
-EXPRESSION -> NUMEXPRESSION EXAUX                   EXAUX.left = NUMEXPRESSION.node
+EXPRESSION -> NUMEXPRESSION EXAUX                   EXAUX.left = NUMEXPRESSION.node (a) (her)                                                EXPRESSION -> NUMEXPRESSION {a}EXAUX
 
-NUMEXPRESSION -> TERM NUMAUX                        NUMAUX.left = TERM.node ;
-                                                    NUMEXPRESSION.node = NUMAUX.node
+NUMEXPRESSION -> TERM NUMAUX                        NUMAUX.left = TERM.node ; (b) (her)                                                      NUMEXPRESSION -> TERM {b}NUMAUX{c}
+                                                    NUMEXPRESSION.node = NUMAUX.node (c) (sint)
 
-TERM -> UNARYEXPR TERMSUF                           TERMSUF.left = UNARYEXPR.node ;
-                                                    TERM.node = TERMSUF.node
+TERM -> UNARYEXPR TERMSUF                           TERMSUF.left = UNARYEXPR.node ; (d) (her)                                                TERM -> UNARYEXPR {d}TERMSUF{e}
+                                                    TERM.node = TERMSUF.node (e) (sint)
 
-NUMAUX -> plus TERM NUMAUXSUF                       NUMAUXSUF.left = TERM.node
-                                                    NUMAUX.node = newnode(plus.vallex, NUMAUX.left, NUMAUXSUF.node)
+NUMAUX -> plus TERM NUMAUXSUF                       NUMAUXSUF.left = TERM.node (f) (her)                                                     NUMAUX -> plus TERM {f}NUMAUXSUF{g}
+                                                    NUMAUX.node = newnode(plus.vallex, NUMAUX.left, NUMAUXSUF.node) (g) (sint)
 
-NUMAUX -> minus TERM NUMAUXSUF                      NUMAUXSUF.left = TERM.node
-                                                    NUMAUX.node = newnode(minus.vallex, NUMAUX.left, NUMAUXSUF.node)
+NUMAUX -> minus TERM NUMAUXSUF                      NUMAUXSUF.left = TERM.node (h) (her)                                                     NUMAUX -> minus TERM {h}NUMAUXSUF{i}
+                                                    NUMAUX.node = newnode(minus.vallex, NUMAUX.left, NUMAUXSUF.node) (i) (sint)
 
-NUMAUX -> &                                         NUMAUX.node = NUMAUX.left
+NUMAUX -> &                                         NUMAUX.node = NUMAUX.left (j) (sint)                                                     NUMAUX -> &{j}
 
-NUMAUXSUF -> NUMAUX                                 NUMAUXSUF.node = NUMAUX.node
+NUMAUXSUF -> NUMAUX                                 NUMAUXSUF.node = NUMAUX.node (k) (sint)                                                  NUMAUXSUF -> NUMAUX{k}
 
-NUMAUXSUF -> &                                      NUMAUXSUF.node = NUMAUXSUF.left
+NUMAUXSUF -> &                                      NUMAUXSUF.node = NUMAUXSUF.left (l) (sint)                                               NUMAUXSUF -> &{l}
 
-UNARYEXPR -> plus FACTOR                            UNARYEXPR.node = FACTOR.node
+UNARYEXPR -> plus FACTOR                            UNARYEXPR.node = FACTOR.node (m) (sint)                                                  UNARYEXPR -> plus FACTOR{m}
 
-UNARYEXPR -> minus FACTOR                           UNARYEXPR.node = FACTOR.node
+UNARYEXPR -> minus FACTOR                           UNARYEXPR.node = FACTOR.node (n) (sint)                                                  UNARYEXPR -> minus FACTOR{n}
 
-UNARYEXPR -> FACTOR                                 UNARYEXPR.node = FACTOR.node
+UNARYEXPR -> FACTOR                                 UNARYEXPR.node = FACTOR.node (o) (sint)                                                  UNARYEXPR -> FACTOR{o}
 
-TERMSUF -> times UNARYEXPR                          TERMSUF.node = newnode(times.vallex, TERMSUF.left, UNARYEXPR.node)
+TERMSUF -> times UNARYEXPR                          TERMSUF.node = newnode(times.vallex, TERMSUF.left, UNARYEXPR.node) (p) (sint)            TERMSUF -> times UNARYEXPR{p}
 
-TERMSUF -> divide UNARYEXPR                         TERMSUF.node = newnode(divide.vallex, TERMSUF.left, UNARYEXPR.node)
+TERMSUF -> divide UNARYEXPR                         TERMSUF.node = newnode(divide.vallex, TERMSUF.left, UNARYEXPR.node) (q) (sint)           TERMSUF -> divide UNARYEXPR{q}
 
-TERMSUF -> mod UNARYEXPR                            TERMSUF.node = newnode(mod.vallex, TERMSUF.left, UNARYEXPR.node)
+TERMSUF -> mod UNARYEXPR                            TERMSUF.node = newnode(mod.vallex, TERMSUF.left, UNARYEXPR.node) (r) (sint)              TERMSUF -> mod UNARYEXPR{r}
 
-TERMSUF -> &                                        TERMSUF.node = TERMSUF.left
+TERMSUF -> &                                        TERMSUF.node = TERMSUF.left (s) (sint)                                                   TERMSUF -> &{s}
 
-FACTOR -> int_constant                              FACTOR.node = newnode(int_constant.vallex, _, _)
+FACTOR -> int_constant                              FACTOR.node = newnode(int_constant.vallex, _, _) (t) (sint)                              FACTOR -> int_constant{t}
 
-FACTOR -> float_constant                            FACTOR.node = newnode(float_constant.vallex, _, _)
+FACTOR -> float_constant                            FACTOR.node = newnode(float_constant.vallex, _, _) (u) (sint)                            FACTOR -> float_constant{u}
 
-FACTOR -> string_constant                           FACTOR.node = newnode(string_constant.vallex, _, _)
+FACTOR -> string_constant                           FACTOR.node = newnode(string_constant.vallex, _, _) (v) (sint)                           FACTOR -> string_constant{v}
 
-FACTOR -> null                                      FACTOR.node = newnode(null.vallex, _, _)
+FACTOR -> null                                      FACTOR.node = newnode(null.vallex, _, _) (w) (sint)                                      FACTOR -> null{w}
 
-FACTOR -> LVALUE                                    FACTOR.node = LVALUE.node
+FACTOR -> LVALUE                                    FACTOR.node = LVALUE.node (x) (sint)                                                     FACTOR -> LVALUE{x}
 
-FACTOR -> lparen NUMEXPRESSION rparen               FACTOR.node = NUMEXPRESSION.node
+FACTOR -> lparen NUMEXPRESSION rparen               FACTOR.node = NUMEXPRESSION.node (y) (sint)                                              FACTOR -> lparen NUMEXPRESSION rparen{y}
 
-LVALUE -> ident LVAUX                               LVALUE.node = newnode(ident.vallex, _, _)
+LVALUE -> ident LVAUX                               LVALUE.node = newnode(ident.vallex, _, LVAUX.node) (z) (sint)                            LVALUE -> ident LVAUX{z}
 
 LVAUX -> lbracket NUMEXPRESSION rbracket LVAUXSUF   ??
 LVAUX -> &
 LVAUXSUF -> LVAUX
 LVAUXSUF -> &
 
-EXAUX -> less NUMEXPRESSION                         EXAUX.node = newnode(less.vallex, EXAUX.left, NUMEXPRESSION.node)
-EXAUX -> greater NUMEXPRESSION                      EXAUX.node = newnode(greater.vallex, EXAUX.left, NUMEXPRESSION.node)
-EXAUX -> lessequal NUMEXPRESSION                    EXAUX.node = newnode(lessequal.vallex, EXAUX.left, NUMEXPRESSION.node)
-EXAUX -> greaterequal NUMEXPRESSION                 EXAUX.node = newnode(greaterequal.vallex, EXAUX.left, NUMEXPRESSION.node)
-EXAUX -> equal NUMEXPRESSION                        EXAUX.node = newnode(equal.vallex, EXAUX.left, NUMEXPRESSION.node)
-EXAUX -> diff NUMEXPRESSION                         EXAUX.node = newnode(diff.vallex, EXAUX.left, NUMEXPRESSION.node)
-EXAUX -> &                                          EXAUX.node = EXAUX.left
+EXAUX -> less NUMEXPRESSION                         EXAUX.node = newnode(less.vallex, EXAUX.left, NUMEXPRESSION.node) (ab) (sint)            EXAUX -> less NUMEXPRESSION{ab}
+EXAUX -> greater NUMEXPRESSION                      EXAUX.node = newnode(greater.vallex, EXAUX.left, NUMEXPRESSION.node) (ac) (sint)         EXAUX -> greater NUMEXPRESSION{ac}
+EXAUX -> lessequal NUMEXPRESSION                    EXAUX.node = newnode(lessequal.vallex, EXAUX.left, NUMEXPRESSION.node) (ad) (sint)       EXAUX -> lessequal NUMEXPRESSION{ad}
+EXAUX -> greaterequal NUMEXPRESSION                 EXAUX.node = newnode(greaterequal.vallex, EXAUX.left, NUMEXPRESSION.node) (ae) (sint)    EXAUX -> greaterequal NUMEXPRESSION{ae}
+EXAUX -> equal NUMEXPRESSION                        EXAUX.node = newnode(equal.vallex, EXAUX.left, NUMEXPRESSION.node) (af) (sint)           EXAUX -> equal NUMEXPRESSION{af}
+EXAUX -> diff NUMEXPRESSION                         EXAUX.node = newnode(diff.vallex, EXAUX.left, NUMEXPRESSION.node) (ag) (sint)            EXAUX -> diff NUMEXPRESSION{ag}
+EXAUX -> &                                          EXAUX.node = EXAUX.left (ah) (sint)                                                      EXAUX -> &{ah}
