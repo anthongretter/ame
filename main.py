@@ -10,11 +10,6 @@ if __name__ == "__main__":
 
     with open(args.path_to_file, 'r') as exemplo:
         tokens, symbol_table = Lexer.read(exemplo.read())
-
-    # syntaxer = Syntaxer(tokens, symbol_table)
-
-    # print(tokens)
-    # print(symbol_table)
     
     maquina = Syntaxer(tokens, TABELA)
     print(maquina)
@@ -22,4 +17,4 @@ if __name__ == "__main__":
     if res == ResultadoAnalise.SUCESSO:
         print('Análise sintática concluída com sucesso')
 
-    print(SymbolTable())
+    # print(SymbolTable())

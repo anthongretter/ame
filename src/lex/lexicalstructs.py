@@ -13,7 +13,7 @@ class IdLex:
     index: int
 
     def __str__(self):
-        return f"{self.__class__.__name__}({self.datatype},{self.magnitude},{self.value},{self.lineno},{self.index})"
+        return f"{self.__class__.__name__}(data={self.datatype},mag={self.magnitude},vallex={self.value},line={self.lineno},column={self.index})"
 
 
 class SymbolTable(metaclass=Singleton):
@@ -33,6 +33,10 @@ class SymbolTable(metaclass=Singleton):
 
     def addmag(self, vallex: str, mag: int):
         self.l[self.index(vallex)].magnitude = mag
+
+    def get(self, vallex: str) -> IdLex:
+        i = self.index(vallex)
+        return self.l[i]
 
     def __str__(self):
         return "\n".join([str(t) for t in self.l])

@@ -1,0 +1,17 @@
+
+FUNCDEF -> def (c) ident  lparen (a) PARAMLIST rparen lbrace STATELIST rbrace (b)  
+PARAMLIST -> int (c) ident  PARAMLISTSUF 
+PARAMLIST -> float (c) ident  PARAMLISTSUF 
+PARAMLIST -> string (c) ident PARAMLISTSUF 
+PARAMLIST -> &
+IFSTAT -> if lparen EXPRESSION rparen (a) STATEMENT (b) IFSTATSUF 
+IFSTATSUF -> else (a) STATEMENT (b) 
+IFSTATSUF -> &
+FORSTAT -> for lparen (a) ATRIBSTAT semicolumn EXPRESSION semicolumn ATRIBSTAT rparen STATEMENT (b)
+VARDECL -> int (c) ident DECAUX   
+VARDECL -> float (c) ident DECAUX 
+VARDECL -> string (c) ident DECAUX  
+
+a -> pilha.novo_escopo() 
+b -> pilha.fim_escopo()
+c -> pilha.insert(ident.vallex)

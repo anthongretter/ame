@@ -3,7 +3,7 @@ ATRIBSTAT -> LVALUE assign ATRIBSTATSUF             ATRIBSTAT.node = newnode(ass
 ATRIBSTATSUF -> EXPRESSION                          ATRIBSTATSUF.node = EXPRESSION.node (za) (sint)                                         ATRIBSTATSUF -> EXPRESSION{za}
 
 EXPRESSION -> NUMEXPRESSION EXAUX                   EXAUX.left = NUMEXPRESSION.node (a) (her)                                                EXPRESSION -> NUMEXPRESSION {a}EXAUX{aa}
-                                                    EXPRESSION.node = EXAUX.node  
+                                                    EXPRESSION.node = EXAUX.node  (aa) (sint)                                              
 
 NUMEXPRESSION -> TERM NUMAUX                        NUMAUX.left = TERM.node ; (b) (her)                                                      NUMEXPRESSION -> TERM {b}NUMAUX{c}
                                                     NUMEXPRESSION.node = NUMAUX.node (c) (sint)
@@ -53,7 +53,7 @@ FACTOR -> LVALUE                                    FACTOR.node = LVALUE.node (x
 
 FACTOR -> lparen NUMEXPRESSION rparen               FACTOR.node = NUMEXPRESSION.node (y) (sint)                                              FACTOR -> lparen NUMEXPRESSION rparen{y}
 
-LVALUE -> ident LVAUX                               LVALUE.node = newnode(LVAUX.ident, _, LVAUX.node) (z) (sint)                            LVALUE -> ident {zz}LVAUX{z}
+LVALUE -> ident LVAUX                               LVALUE.node = newnode(ident.vallex, _, _) (z) (sint)                            LVALUE -> ident {zz}LVAUX{z}
                                                     LVAUX.ident = ident (zz) (her)
 LVAUX -> lbracket NUMEXPRESSION rbracket LVAUXSUF   
 LVAUX -> &

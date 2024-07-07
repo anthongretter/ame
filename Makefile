@@ -12,20 +12,20 @@ $(VENV_PATH):
 	python -m venv $@
 
 install: requirements.txt $(VENV_PATH)
-	@PI=$(word 2,$^)/bin/python
+	@export PI=$(word 2,$^)/bin/python
 	$(PI) -m pip install -r $<
 
-run:
+run: install
 	@if [ -z "$(FILE)" ]; then \
 		echo "Usage: make run FILE=path/to/your/file.ame"; \
 	else \
-		. venv/bin/activate && export PYTHONPATH=$(shell pwd) && python main.py $(FILE); \
+		$(PI) main.py $(FILE); \
     fi
 
-test1:
-	. venv/bin/activate && export PYTHONPATH=$(shell pwd) && python main.py 'src/test/arvere.ame'
+test1: install
+	$(PI) main.py 'src/test/arvere.ame'
 
-test2:
-	. venv/bin/activate && export PYTHONPATH=$(shell pwd) && python main.py 'src/test/merge.ame'
+test2: install
+	$(PI) main.py 'src/test/merge.ame'
 
-all: install run
+all: install

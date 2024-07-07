@@ -1,6 +1,6 @@
 from src.lex.lexer import reserved
 from src.lex.lexicalstructs import SymbolTable
-from src.semantic.semanticstructs import Node
+from src.semantic.semanticstructs import Node, PilhaEscopoBreak, PilhaEscopoVariaveis
 from dataclasses import dataclass
 
 
@@ -55,14 +55,29 @@ class DEC:
     def h(l, t_anteriores):
         l[0].attrs['magnitude'] = 0
 
+    @staticmethod
+    def i(l, t_anteriores):
+        SymbolTable().addtype(t_anteriores[0].value, t_anteriores[1].value)
+
+    @staticmethod
+    def j(l, t_anteriores):
+        SymbolTable().addtype(t_anteriores[0].value, t_anteriores[1].value)
+
+    @staticmethod
+    def k(l, t_anteriores):
+        SymbolTable().addtype(t_anteriores[0].value, t_anteriores[1].value)
+
+    @staticmethod
+    def l(l, t_anteriores):
+        SymbolTable().addtype(t_anteriores[0].value, t_anteriores[1].value)
+
 
 class EXPA:
 
     @staticmethod
     def zb(l, t_anteriores):
         l[0].attrs['node'] = Node("ASSIGN", l[1].attrs['node'], l[3].attrs['node'])
-        print(l[0].attrs['node'])
-        print()
+        # l[0].attrs['node'].validate_datatype()
 
     @staticmethod
     def za(l, t_anteriores):
@@ -75,6 +90,7 @@ class EXPA:
     @staticmethod
     def aa(l, t_anteriores):
         l[0].attrs['node'] = l[2].attrs['node']
+        l[0].attrs['node'].validate_datatype()
 
     @staticmethod
     def b(l, t_anteriores):
@@ -91,7 +107,6 @@ class EXPA:
     @staticmethod
     def e(l, t_anteriores):
         l[0].attrs['node'] = l[2].attrs['node']
-
 
     @staticmethod
     def f(l, t_anteriores):
@@ -144,7 +159,6 @@ class EXPA:
     @staticmethod
     def q(l, t_anteriores):
         l[0].attrs['node'] = Node('DIVIDE', l[0].attrs['left'], l[3].attrs['node'])
-        # print(l[0].attrs['node'])
 
     @staticmethod
     def qq(l, t_anteriores):
@@ -188,7 +202,7 @@ class EXPA:
 
     @staticmethod
     def z(l, t_anteriores):
-        l[0].attrs['node'] = Node(l[2].attrs['ident'].value, None, None)
+        l[0].attrs['node'] = Node(l[2].attrs['ident'], None, None)
 
     @staticmethod
     def zz(l, t_anteriores):
@@ -221,3 +235,43 @@ class EXPA:
     @staticmethod
     def ah(l, t_anteriores):
         l[0].attrs['node'] = l[0].attrs['left']
+
+class BREAK:
+    @staticmethod
+    def a(l, t_anteriores):
+        pilha = PilhaEscopoBreak()
+        # pilha.push(l[0].attrs['prox'])
+        pilha.push('temp')
+    
+    @staticmethod
+    def b(l, t_anteriores):
+        pilha = PilhaEscopoBreak()
+        try:
+            pilha.pop() # Se falhar, erro de sintaxe (nao tem fechamento de loop)
+        except:
+            raise Exception("Erro sintático, loop for fechado sem ser aberto")
+
+    @staticmethod
+    def c(l, t_anteriores):
+        pilha = PilhaEscopoBreak()
+        if not pilha.peek():
+            # Se falhar, erro semantico
+            raise Exception("break fora de escopo")
+
+class ESCOPOVAR:
+    @staticmethod
+    def a(l, t_anteriores):
+        pilha = PilhaEscopoVariaveis()
+        pilha.novo_escopo()
+
+    @staticmethod
+    def b(l, t_anteriores):
+        pilha = PilhaEscopoVariaveis()
+        pilha.fim_escopo()
+    
+    @staticmethod
+    def c(l,  t_anteriores):
+        pilha = PilhaEscopoVariaveis()
+        if pilha.insert(t_anteriores[0].value):
+            raise Exception(f'{t_anteriores[0].value} Já foi definido no escopo')
+        

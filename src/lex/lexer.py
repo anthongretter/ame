@@ -1,5 +1,7 @@
 import ply.lex as lex
 
+SEPS = {'+', '-', '*', '/', '%', '=', '==', '!=', '>', '<', '>=', '<=',
+        '(', ')', '{', '}', '[', ']', ',', ';'}
 
 reserved = {
     'def': "DEF",
@@ -14,7 +16,8 @@ reserved = {
     'return': "RETURN",
     'call': "CALL",
     'new': "NEW",
-    'null': "NULL"
+    'null': "NULL",
+    'break': "BREAK"
 }
 
 tokens = (
@@ -91,12 +94,6 @@ def t_IDENT(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value, 'IDENT')
     return t
-
-# def t_all(t):
-#     r'.'
-#     # if not t.column:
-#     #     t.column = 0
-#     t.lexpos = t.lexer.lexpos - t.lexer.linestart + 1 - 20950943095
 
 def t_newline(t):
     r'\n+'

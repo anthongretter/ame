@@ -11,3 +11,8 @@ VARDECL -> string ident DECAUX                          addtype(ident.vallex, st
 DECAUX -> lbracket int_constant rbracket DECAUX(1)      DECAUX.magnitude = DECAUX(1).magnitude + 1 (g) (sint) ;  DECAUX -> lbracket int_constant rbracket DECAUX(1){g}
 
 DECAUX -> &                                             DECAUX.magnitude = 0 (h) (sint)                          DECAUX -> &{h}
+
+FUNCDEF -> def ident lparen PARAMLIST rparen lbrace STATELIST rbrace    addtype(ident.vallex, def.vallex) (i) (her) ;   FUNCDEF -> def {i}ident lparen PARAMLIST rparen lbrace STATELIST rbrace
+PARAMLIST -> int ident PARAMLISTSUF                                     addtype(ident.vallex, int.vallex) (j) (her)     PARAMLIST -> int {j}ident PARAMLISTSUF
+PARAMLIST -> float ident PARAMLISTSUF                                   addtype(ident.vallex, float.vallex) (k) (her)   PARAMLIST -> float {k}ident PARAMLISTSUF
+PARAMLIST -> string ident PARAMLISTSUF                                  addtype(ident.vallex, string.vallex) (l) (her)  PARAMLIST -> int {l}ident PARAMLISTSUF

@@ -1,6 +1,3 @@
-from typing import Any
-
-
 class Singleton(type):
     _instances = {}
 
@@ -19,4 +16,5 @@ class SingletonSymbol(type):
         if name not in cls._instances:
             instance = super().__call__(*args, **kwargs)
             cls._instances[name] = instance
+        print(SingletonSymbol._instances)
         return cls._instances[name]

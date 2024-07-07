@@ -51,7 +51,7 @@ class Syntaxer(metaclass=Singleton):
     def __init__(self, entrada: list[LexToken], tabela: dict[str, dict[str, tuple]]):
         self.pilha = [] # a pilha possui objetos do tipo NaoTerminal, Terminal e AcaoSemantica
         self.entrada = entrada # a entrada possui objetos do tipo LexToken
-        self.index = 0
+        self.index = 0 # indice de acesso a entrada atual
         self.tabela = {}
         fim_de_entrada = LexToken()
         fim_de_entrada.type = '$'
