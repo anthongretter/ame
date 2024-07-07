@@ -3,7 +3,7 @@ from src.syntax.syntaxer import Syntaxer, ResultadoAnalise
 from src.syntax.tabela_ll1_parseamento import TABELA
 
 if __name__ == "__main__":
-    with open('src/resources/merge.ame', 'r') as exemplo:
+    with open('src/resources/arvere.ame', 'r') as exemplo:
         tokens, symbol_table = Lexer.read(exemplo.read())
 
     # syntaxer = Syntaxer(tokens, symbol_table)
@@ -17,4 +17,4 @@ if __name__ == "__main__":
     if res == ResultadoAnalise.SUCESSO:
         print('Análise sintática concluída com sucesso')
 
-    
+    print(SymbolTable())

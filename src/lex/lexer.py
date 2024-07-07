@@ -14,6 +14,7 @@ reserved = {
     'return': "RETURN",
     'call': "CALL",
     'new': "NEW",
+    'null': "NULL"
 }
 
 tokens = (

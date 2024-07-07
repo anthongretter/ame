@@ -105,5 +105,7 @@ def main() {
   temp = call printArray(arr, arr_size);
   print "\n";
 
+  zero = 100 + 1232 * 343;
+
   return zero;
 }

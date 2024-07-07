@@ -1,6 +1,9 @@
-ATRIBSTAT -> LVALUE assign ATRIBSTATSUF
-ATRIBSTATSUF -> EXPRESSION
-EXPRESSION -> NUMEXPRESSION EXAUX                   EXAUX.left = NUMEXPRESSION.node (a) (her)                                                EXPRESSION -> NUMEXPRESSION {a}EXAUX
+ATRIBSTAT -> LVALUE assign ATRIBSTATSUF             ATRIBSTAT.node = newnode(assign.vallex, LVALUE.node, ATRIBSTATSUF.node) (zb) (sint)     ATRIBSTAT -> LVALUE assign ATRIBSTATSUF{zb}
+
+ATRIBSTATSUF -> EXPRESSION                          ATRIBSTATSUF.node = EXPRESSION.node (za) (sint)                                         ATRIBSTATSUF -> EXPRESSION{za}
+
+EXPRESSION -> NUMEXPRESSION EXAUX                   EXAUX.left = NUMEXPRESSION.node (a) (her)                                                EXPRESSION -> NUMEXPRESSION {a}EXAUX{aa}
+                                                    EXPRESSION.node = EXAUX.node  
 
 NUMEXPRESSION -> TERM NUMAUX                        NUMAUX.left = TERM.node ; (b) (her)                                                      NUMEXPRESSION -> TERM {b}NUMAUX{c}
                                                     NUMEXPRESSION.node = NUMAUX.node (c) (sint)
@@ -26,11 +29,14 @@ UNARYEXPR -> minus FACTOR                           UNARYEXPR.node = FACTOR.node
 
 UNARYEXPR -> FACTOR                                 UNARYEXPR.node = FACTOR.node (o) (sint)                                                  UNARYEXPR -> FACTOR{o}
 
-TERMSUF -> times UNARYEXPR                          TERMSUF.node = newnode(times.vallex, TERMSUF.left, UNARYEXPR.node) (p) (sint)            TERMSUF -> times UNARYEXPR{p}
+TERMSUF -> times UNARYEXPR TERMSUF(1)               TERMSUF.node = newnode(times.vallex, TERMSUF.left, TERMSUF(1).node) (p) (sint)            TERMSUF -> times UNARYEXPR {pp}TERMSUF(1){p}
+                                                    TERMSUF(1).left = UNARYEXPR.node (pp) (her)
 
-TERMSUF -> divide UNARYEXPR                         TERMSUF.node = newnode(divide.vallex, TERMSUF.left, UNARYEXPR.node) (q) (sint)           TERMSUF -> divide UNARYEXPR{q}
-
-TERMSUF -> mod UNARYEXPR                            TERMSUF.node = newnode(mod.vallex, TERMSUF.left, UNARYEXPR.node) (r) (sint)              TERMSUF -> mod UNARYEXPR{r}
+TERMSUF -> divide UNARYEXPR TERMSUF(1)              TERMSUF.node = newnode(divide.vallex, TERMSUF.left, TERMSUF(1).node) (q) (sint)           TERMSUF -> divide UNARYEXPR {qq}TERMSUF(1){q}
+                                                    TERMSUF(1).left = UNARYEXPR.node (qq) (her)
+                                                    
+TERMSUF -> mod UNARYEXPR TERMSUF(1)                 TERMSUF.node = newnode(mod.vallex, TERMSUF.left, TERMSUF(1).node) (r) (sint)              TERMSUF -> mod UNARYEXPR {rr}TERMSUF(1){r}
+                                                    TERMSUF(1).left = UNARYEXPR.node (rr) (her)
 
 TERMSUF -> &                                        TERMSUF.node = TERMSUF.left (s) (sint)                                                   TERMSUF -> &{s}
 
@@ -47,9 +53,9 @@ FACTOR -> LVALUE                                    FACTOR.node = LVALUE.node (x
 
 FACTOR -> lparen NUMEXPRESSION rparen               FACTOR.node = NUMEXPRESSION.node (y) (sint)                                              FACTOR -> lparen NUMEXPRESSION rparen{y}
 
-LVALUE -> ident LVAUX                               LVALUE.node = newnode(ident.vallex, _, LVAUX.node) (z) (sint)                            LVALUE -> ident LVAUX{z}
-
-LVAUX -> lbracket NUMEXPRESSION rbracket LVAUXSUF   ??
+LVALUE -> ident LVAUX                               LVALUE.node = newnode(LVAUX.ident, _, LVAUX.node) (z) (sint)                            LVALUE -> ident {zz}LVAUX{z}
+                                                    LVAUX.ident = ident (zz) (her)
+LVAUX -> lbracket NUMEXPRESSION rbracket LVAUXSUF   
 LVAUX -> &
 LVAUXSUF -> LVAUX
 LVAUXSUF -> &

@@ -1,8 +1,9 @@
+import pprint
 from ply.lex import LexToken
 from enum import Enum
 
 from src.semantic.actions import SemanticAction
-from src.utils import Singleton
+from src.utils import Singleton, SingletonSymbol
 
 
 class ResultadoAnalise(Enum):
@@ -10,7 +11,7 @@ class ResultadoAnalise(Enum):
     ERRO_NAO_TERMINAL = 1
     SUCESSO = 2
 
-class NaoTerminal:
+class NaoTerminal(metaclass=SingletonSymbol):
     def __init__(self, nome):
         self.nome = nome
         self.attrs = {}
@@ -21,7 +22,7 @@ class NaoTerminal:
     def __repr__(self):
         return f'NT({self.nome})'
         
-class Terminal:
+class Terminal(metaclass=SingletonSymbol):
     def __init__(self, nome: str):
         self.nome = nome
         self.attrs = {}
@@ -50,6 +51,7 @@ class Syntaxer(metaclass=Singleton):
     def __init__(self, entrada: list[LexToken], tabela: dict[str, dict[str, tuple]]):
         self.pilha = [] # a pilha possui objetos do tipo NaoTerminal, Terminal e AcaoSemantica
         self.entrada = entrada # a entrada possui objetos do tipo LexToken
+        self.index = 0
         self.tabela = {}
         fim_de_entrada = LexToken()
         fim_de_entrada.type = '$'
@@ -80,6 +82,8 @@ class Syntaxer(metaclass=Singleton):
                         aux.append(SemanticAction(elemento, None))
                     elif elemento.isupper():
                         aux.append(NaoTerminal(elemento))
+                        # pprint.pprint(SingletonSymbol._instances, indent=4)
+                        # input()
                     else:
                         aux.append(Terminal(elemento))
                 
@@ -114,18 +118,18 @@ class Syntaxer(metaclass=Singleton):
         return self.pilha[-1]
 
     def consome_entrada(self):
-        return self.entrada.pop(0)
+        self.index += 1
     
     def topo_entrada(self):
-        return self.entrada[0]
+        return self.entrada[self.index]
 
     def analise(self) -> ResultadoAnalise:
         while True:
             X = self.topo_pilha()
             a = self.topo_entrada()
-            print('-----------')
-            print(f'pilha: {self.pilha}')
-            print(f'token: {a}')
+            # print('-----------')
+            # print(f'pilha: {self.pilha}')
+            # print(f'token: {a}')
             # input()
             if isinstance(X, Terminal):
                 if X.nome == a.type.lower():
@@ -142,7 +146,7 @@ class Syntaxer(metaclass=Singleton):
                 
             elif isinstance(X, NaoTerminal):
                 if a.type.lower() in self.tabela[X.nome]:
-                    print(f'Empilhando {self.tabela[X.nome][a.type.lower()]}')
+                    # print(f'Empilhando {self.tabela[X.nome][a.type.lower()]}')
                     self.desempilha()
 
                     # TODO verificar isso
@@ -156,15 +160,16 @@ class Syntaxer(metaclass=Singleton):
                     print(f'Erro ao ler o token {a.value} na linha {a.lineno} e coluna {a.lexpos}! (NaoTerminal)')
                     return ResultadoAnalise.ERRO_NAO_TERMINAL
             elif isinstance(X, SemanticAction):
-                # a
-                # self.entrada[0:1]
-                print(X.args)
-                input()
-                X.func(X.args, self.entrada[0:2])
+                # print(X.args)
+                # print(self.entrada[self.index])
+                # print("HIST:", self.entrada[0:self.index+1][::-1])
+                # input()
+                X.func(X.args, self.entrada[0:self.index+1][::-1])
                 self.desempilha()
             else:
                 raise Exception(f'Erro (OBJETO NA PILHA NÃO RECONHECIDO) {X}')
         
+        # print(NaoTerminal("NUMEXPRESSION").attrs['node'])
         return ResultadoAnalise.SUCESSO
 
 # M = {}
