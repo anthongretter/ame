@@ -58,7 +58,7 @@ def which_symbol(lexvalue: str) -> str:
     return "ID"
 
 
-with open('../resources/exemplo.txt', 'r') as exemplo:
+with open('../test/exemplo.txt', 'r') as exemplo:
     trie: dict = RESERVED_WORDS_DIAG
     look_for_reserved = True
     symbol = ""
