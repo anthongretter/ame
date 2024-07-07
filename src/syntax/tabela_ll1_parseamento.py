@@ -1520,4 +1520,4 @@ TABELA: dict = {   'ALLOCAUX': {   '$': '-',
                    'times': '-'}
     }
 
-pprint.pprint(TABELA, indent=4)
+# pprint.pprint(TABELA, indent=4)

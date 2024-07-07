@@ -41,6 +41,7 @@ FACTOR -> float_constant                            FACTOR.node = newnode(float_
 FACTOR -> string_constant                           FACTOR.node = newnode(string_constant.vallex, _, _) (v) (sint)                           FACTOR -> string_constant{v}
 
 FACTOR -> null                                      FACTOR.node = newnode(null.vallex, _, _) (w) (sint)                                      FACTOR -> null{w}
+                                                    
 
 FACTOR -> LVALUE                                    FACTOR.node = LVALUE.node (x) (sint)                                                     FACTOR -> LVALUE{x}
 

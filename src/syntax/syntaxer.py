@@ -22,21 +22,29 @@ class NaoTerminal:
         return f'NT({self.nome})'
         
 class Terminal:
-    def __init__(self, nome):
+    def __init__(self, nome: str):
         self.nome = nome
-        # self.ação = False
+        self.attrs = {}
     
     def __str__(self):
         return f'T({self.nome})'
     
     def __repr__(self):
         return f'T({self.nome})'
-        
-# class Ação_Semântica:
-#     def __init__(self, função, lista_parâmetros):
-#         self.função = função
-#         self.parâmetros = lista_parâmetros
-#         # self.ação = True
+
+class Producao:
+    def __init__(self, cabeca: NaoTerminal, cauda: list[any]): #NT ou T ou AcaoSemantica
+        self.cabeca = cabeca
+        self.cauda = cauda
+    
+    def add_elemento(self, elemento):
+        self.cauda.append(elemento)
+
+    def eh_vazio(self):
+        return len(self.cauda) == 0
+    
+    def __str__(self):
+        return f'{self.cauda}'
 
 class Syntaxer(metaclass=Singleton):
     def __init__(self, entrada: list[LexToken], tabela: dict[str, dict[str, tuple]]):
@@ -58,41 +66,40 @@ class Syntaxer(metaclass=Singleton):
     def gerar_tabela(self, tabela_ll1):
         # TABELA
         tabela = {}
-        for cabeça in tabela_ll1.keys():
-            tabela[cabeça] = {}
-            for cauda in tabela_ll1[cabeça]:
-                tabela[cabeça][cauda] = []
-                for i in tabela_ll1[cabeça][cauda]:
-                    if i == '-':
-                        pass
-                    elif callable(i):
-                        continue
-                        # FIXME: precisa da cabeça como NaoTerminal para incluir na ação
-                        # FIXME: precisa da produção inteira como entrada nas ações
-                        #
-                        #        exemplo:
-                        #               T -> F {a}B
-                        #                       ^
-                        #               Se a ação estiver aqui, só vai dar para passar oq ja foi
-                        #               criado como parametro (tudo a esquerda)
-                        #               Daria para percorrer tudo de novo para setar todas ações, mas
-                        #               n sei né, oq acham?
-                        #
-                        # tabela[cabeça][cauda].append(SemanticAction(i, tabela[cabeça][cauda]))
-                    elif i.isupper():
-                        tabela[cabeça][cauda].append(NaoTerminal(i))
+        for cabeca in tabela_ll1.keys():
+            tabela[cabeca] = {}
+            for cauda in tabela_ll1[cabeca]:
+                cab = NaoTerminal(cabeca)
+                aux = []
+                
+                for elemento in tabela_ll1[cabeca][cauda]:
+                    if elemento == '-':
+                        continue                        
+                        
+                    if callable(elemento):
+                        aux.append(SemanticAction(elemento, None))
+                    elif elemento.isupper():
+                        aux.append(NaoTerminal(elemento))
                     else:
-                        tabela[cabeça][cauda].append(Terminal(i))
+                        aux.append(Terminal(elemento))
+                
+                if len(aux) != 0:
+                    for e in aux:
+                        if isinstance(e, SemanticAction):
+                           e.addcauda([cab] + list(filter(lambda ele: not isinstance(ele, SemanticAction), aux))) 
+
+                    tabela[cabeca][cauda] = Producao(cab, aux)
+
         return tabela
         
     def __str__(self):
         tabela_str = ""
-        for cabeça in self.tabela.keys():
-            tabela_str += f"[{cabeça}]\n"
-            for cauda in self.tabela[cabeça].keys():
-                if len(self.tabela[cabeça][cauda]) == 0:
+        for cabeca in self.tabela.keys():
+            tabela_str += f"[{cabeca}]\n"
+            for cauda in self.tabela[cabeca].keys():
+                if len(self.tabela[cabeca][cauda].cauda) == 0:
                     continue
-                tabela_str += f" >'{cauda}' -> {self.tabela[cabeça][cauda]}"
+                tabela_str += f" >'{cauda}' -> {self.tabela[cabeca][cauda].cauda}"
                 tabela_str += "\n"
             tabela_str += "\n"
         return f'Pilha: {self.pilha}\nEntrada: {self.entrada}\nTabela: {tabela_str}'
@@ -139,17 +146,22 @@ class Syntaxer(metaclass=Singleton):
                     self.desempilha()
 
                     # TODO verificar isso
-                    if self.tabela[X.nome][a.type.lower()] == []:
+                    if self.tabela[X.nome][a.type.lower()].cauda == []:
                         print(f'Erro ao ler o token {a.value} na linha {a.lineno} e coluna {a.lexpos}! (NaoTerminal - Empilhando vazio)')
                         return ResultadoAnalise.ERRO_NAO_TERMINAL
                     
-                    for i in self.tabela[X.nome][a.type.lower()][::-1]:
+                    for i in self.tabela[X.nome][a.type.lower()].cauda[::-1]:
                         self.empilha(i)
                 else:
                     print(f'Erro ao ler o token {a.value} na linha {a.lineno} e coluna {a.lexpos}! (NaoTerminal)')
                     return ResultadoAnalise.ERRO_NAO_TERMINAL
             elif isinstance(X, SemanticAction):
-                X.execute()
+                # a
+                # self.entrada[0:1]
+                print(X.args)
+                input()
+                X.func(X.args, self.entrada[0:2])
+                self.desempilha()
             else:
                 raise Exception(f'Erro (OBJETO NA PILHA NÃO RECONHECIDO) {X}')
         

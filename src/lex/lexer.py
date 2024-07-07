@@ -91,14 +91,20 @@ def t_IDENT(t):
     t.type = reserved.get(t.value, 'IDENT')
     return t
 
+# def t_all(t):
+#     r'.'
+#     # if not t.column:
+#     #     t.column = 0
+#     t.lexpos = t.lexer.lexpos - t.lexer.linestart + 1 - 20950943095
 
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-
+    t.lexer.linestart = t.lexer.lexpos
 
 def t_error(t):
-    print(f"Caractere {t.value[0]} desconhecido em {t.lexer.lineno},{t.lexer.lexpos}")
+    print(f"Caractere {t.value[0]} desconhecido em {t.lexer.lineno},{t.lexer.lexpos - t.lexer.linestart + 1}")
 
 
 lexer = lex.lex()
+lexer.linestart = 0

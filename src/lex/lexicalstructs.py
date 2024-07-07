@@ -44,7 +44,12 @@ class SymbolTable(metaclass=Singleton):
 class Lexer:
 
     @staticmethod
-    def read(input: str) -> (list[LexToken], SymbolTable):
+    def find_column(inputa, token):
+        line_start = inputa.rfind('\n', 0, token.lexpos) + 1
+        return (token.lexpos - line_start) + 1
+
+    @staticmethod
+    def read(input: str) -> tuple[list[LexToken], SymbolTable]:
         lexer.input(input)
         symtable = SymbolTable()
         tokens = []
@@ -52,8 +57,11 @@ class Lexer:
         while True:
             tok = lexer.token()
 
-            if not tok: break
-            elif tok.type == "IDENT":
+            if not tok:
+                break
+            
+            tok.lexpos = Lexer.find_column(input, tok)
+            if tok.type == "IDENT":
                 if not tok in symtable:
                     symtable.add(IdLex(None, 0, tok.value, tok.lineno, tok.lexpos))
 
