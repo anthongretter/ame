@@ -24,9 +24,12 @@ run: install
     fi
 
 test1: install
-	$(PI) amec.py 'src/test/arvere.ame'
+	$(PI) main.py 'src/test/merge.ame'
 
 test2: install
-	$(PI) amec.py 'src/test/merge.ame'
+	$(PI) main.py 'src/test/primo.ame'
+
+test3: install
+	$(PI) main.py 'src/test/adivinha.ame'
 
 all: install

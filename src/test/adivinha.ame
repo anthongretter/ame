@@ -1,0 +1,103 @@
+def gerar_numero_aleatorio(int seed) {
+    float num;
+    int i;
+    int aux;
+    aux = seed;
+
+    for (i = 0; i < 10; i = i + 1) {
+        aux = aux * 1103515245 + 12345;
+        num = (aux / 65536) % 32768;
+    };
+
+    return num;
+}
+
+def obter_nivel_dificuldade(int nivel){
+    int limite;
+
+    if (nivel == 1) {
+        limite = 50;
+    } else {
+        if (nivel == 2){
+            limite = 100;
+        } else {
+            if (nivel == 3){
+                limite = 200;
+            } else {
+                print "Nível inválido. Definindo nível para Médio.";
+                limite = 100;
+            };
+        };
+    };
+    return limite;
+}
+
+def jogo_adivinhacao_com_dificuldade(int nivel) {
+    int numero_secreto;
+    int tentativas;
+    int adivinhou;
+    int limite;
+    limite = call obter_nivel_dificuldade(nivel);
+
+    print "Digite uma seed para gerar o número aleatório:";
+    int seed;
+    seed = call input(seed);
+
+    print "Estou pensando em um número entre 1 e {limite}.";
+    numero_secreto = call gerar_numero_aleatorio(seed);
+    adivinhou = 0;
+
+    print "Você tem 10 tentativas para adivinhar o número.";
+    int palpite;
+    for (tentativas = 0; tentativas < 10; tentativas = tentativas + 1) {
+        palpite = call input(palpite);
+
+        if (palpite < numero_secreto) {
+            print "Muito baixo! Tente novamente.";
+        } else {
+            if (palpite > numero_secreto) {
+                print "Muito alto! Tente novamente.";
+            } else {
+                adivinhou = 1;
+                print "Parabéns! Você adivinhou o número em {tentativas} tentativas.";
+            };
+        };
+    };
+
+    print "Fim do jogo!";
+}
+
+def imprimir_qualquer_coisa(string qualquer_coisa) {
+    print qualquer_coisa;
+}
+
+def main(){
+    int temp;
+    string qualquer_coisa;
+    qualquer_coisa = "Olá, mundo!";
+    temp = call imprimir_qualquer_coisa(quaisquer_coisa);
+
+    int i;
+    int jogar_novamente;
+    jogar_novamente = 1;
+    for (i = 0; i < 100; i = i + 1) {
+        print "Escolha um nível de dificuldade:";
+        print "1. Fácil (1 a 50)";
+        print "2. Médio (1 a 100)";
+        print "3. Difícil (1 a 200)";
+        nivel = call input(nivel);
+        temp = call jogo_adivinhacao_com_dificuldade(nivel);
+
+        print "Deseja jogar novamente? (1 para sim, 0 para não)";
+        jogar_novamente = call input(jogar_novamente);
+        if (jogar_novamente == 0) {
+            break;
+        } else {
+            if (jogar_novamente == 1) {
+                print "Reiniciando o jogo...";
+            } else {
+                print "Opção inválida. Reiniciando o jogo...";
+            };
+        };
+    };
+}

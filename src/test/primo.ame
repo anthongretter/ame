@@ -1,0 +1,103 @@
+def eh_primo(int numero){
+    int zero;
+    zero = 0;
+    int um;
+    um = 1;
+
+    if (numero <= 1){
+        return zero;
+    };
+    int i;
+    for (i = 2; i < numero; i = i + 1) {
+        if (numero % i == 0){
+            return zero;
+        };
+    };
+    return um;
+}
+
+def listar_primos(int val_max) {
+    int primos[100];
+    int i;
+    int j;
+    j = 0;
+
+    for (i = 2; i <= val_max; i = i + 1) {
+        int response;
+        response = call eh_primo(i);
+
+        if (response == 1) {
+            primos[j] = i;
+            j = j + 1;
+            if (j == 100) {
+                break;
+            };
+        };
+    };
+    return primos;
+}
+
+def escolher_opcao() {
+    int opcao;
+    print "\nEscolha uma opção:";
+    print "1. Verificar se um número é primo";
+    print "2. Listar números primos até um número";
+    print "3. Sair";
+    opcao = call input(opcao);
+    return opcao;
+}
+
+def contar_primos(int val_max) {
+    int primos[100];
+    primos = call listar_primos(val_max);
+
+    int tamanho;
+    tamanho = call len(primos);
+    return tamanho;
+}
+
+
+def main() {
+    print "Bem-vindo a calculadora de números primos!";
+
+    int opcao;
+    opcao = 0;
+
+    int i;
+    for (i = 0; i < 100; i = i + 1) {
+        opcao = call escolher_opcao(opcao);
+
+        if (opcao == 1) {
+            int numero;
+            int aux;
+            numero = call input(numero);
+
+            aux = call eh_primo(numero);
+            if (aux == 1) {
+                print "{numero} é um número primo.";
+            } else {
+                print "{numero} não é um número primo.";
+            };
+        } else {
+            if (opcao == 2) {
+                int val_max;
+                int tamanho;
+                int primos[100];
+
+                print "Digite o valor máximo:";
+                val_max = call input(val_max);
+                primos = call listar_primos(val_max);
+                tamanho = call contar_primos(val_max);
+                print "Quantidade de primos até {val_max}: {tamanho}";
+            } else {
+                if (opcao == 3) {
+                    print "Saindo do programa.";
+                } else {
+                    print "Opção inválida, tente novamente.";
+                };
+            };
+        };
+    };
+
+    print "Obrigado por usar a calculadora de números primos!";
+}

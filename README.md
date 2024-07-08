@@ -68,5 +68,6 @@ make desired_test
 ```
 
 Onde `desired_test` é o teste desejado. Os testes disponíveis são:
-- `test1`: testa o arquivo `arvere.ame`;
-- `test2`: testa o arquivo `merge.ame`;
+- `test1`: testa o arquivo `merge.ame`;
+- `test2`: testa o arquivo `primo.ame`;
+- `test3`: testa o arquivo `adivinha.ame`;
