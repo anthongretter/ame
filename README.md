@@ -35,7 +35,8 @@ SDDs e SDTs do projeto, e a gramática da linguagem.
 - make;
 - Python >= 3.10;
   - pip;
-  - venv.
+  - venv;
+  - ply.
 - Bibliotecas do python estão listadas no arquivo `requirements.txt`.
 
 ### Instalação

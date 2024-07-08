@@ -15,6 +15,7 @@ import argparse
 from src.lex.lexicalstructs import Lexer, SymbolTable
 from src.syntax.syntaxer import Syntaxer, ResultadoAnalise
 from src.syntax.tabela_ll1_parseamento import TABELA
+from time import sleep
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Processa um arquivo .ame")
@@ -23,11 +24,14 @@ if __name__ == "__main__":
 
     with open(args.path_to_file, 'r') as exemplo:
         tokens, symbol_table = Lexer.read(exemplo.read())
+
+    with open('src/resources/greeter', 'r') as greeter:
+        print(greeter.read())
     
     maquina = Syntaxer(tokens, TABELA)
     res = maquina.analise()
     if res == ResultadoAnalise.SUCESSO:
-        print(f'Tabela de Símbolos:{SymbolTable()}')
+        print(f'Tabela de Símbolos:\n\n{SymbolTable()}\n')
         print('Análise sintática concluída com sucesso')
         print('Semântica: Todas as expressões aritméticas são válidas (verificação de tipos)')
         print('Semântica: Todas as declarações de variáveis por escopo são validas')

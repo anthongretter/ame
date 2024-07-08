@@ -20,13 +20,13 @@ run: install
 	@if [ -z "$(FILE)" ]; then \
 		echo "Usage: make run FILE=path/to/your/file.ame"; \
 	else \
-		$(PI) main.py $(FILE); \
+		$(PI) amec.py $(FILE); \
     fi
 
 test1: install
-	$(PI) main.py 'src/test/arvere.ame'
+	$(PI) amec.py 'src/test/arvere.ame'
 
 test2: install
-	$(PI) main.py 'src/test/merge.ame'
+	$(PI) amec.py 'src/test/merge.ame'
 
 all: install
