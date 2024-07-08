@@ -32,4 +32,6 @@ test2: install
 test3: install
 	$(PI) amec.py 'src/test/adivinha.ame'
 
+tests: test1 test2 test3
+
 all: install

@@ -1,8 +1,8 @@
-# Compilador AME
+# AMEC (AME Compiler)
 
-#### Anthon Porath Gretter
-#### Eduardo de Moraes
-#### Matheus Antonio de Souza
+#### A - Anthon Porath Gretter
+#### M - Matheus Antonio de Souza
+#### E - Eduardo de Moraes
 
 ---
 
@@ -37,23 +37,24 @@ SDDs e SDTs do projeto, e a gramática da linguagem.
   - pip;
   - venv;
   - ply.
-- Bibliotecas do python estão listadas no arquivo `requirements.txt`.
+- Versão da biblioteca mencionada contra-se listada no arquivo de dependências `requirements.txt`.
 
 ### Instalação
 
 Para instalar as dependências do projeto, basta executar o comando abaixo:
 
-```bash
+```fish
 make install
 ```
-Obs.: Caso dê algum problema com a ativação do venv, é recomendado deletar a pasta do venv
+
+> Caso dê algum problema com o uso do venv, é recomendado deletar a pasta `venv`
 na raiz do projeto e executar o comando novamente.
 
 ### Execução
 
 Para executar o projeto após instalação, basta executar o comando abaixo:
 
-```bash
+```fish
 make run FILE=path/to/file.ame
 ```
 
@@ -63,7 +64,7 @@ Onde `path/to/file.ame` é o caminho para o arquivo `.ame` a ser analisado.
 
 O projeto possui testes prontos, para executá-los basta executar o comando abaixo:
 
-```bash
+```fish
 make desired_test
 ```
 
@@ -71,3 +72,8 @@ Onde `desired_test` é o teste desejado. Os testes disponíveis são:
 - `test1`: testa o arquivo `merge.ame`;
 - `test2`: testa o arquivo `primo.ame`;
 - `test3`: testa o arquivo `adivinha.ame`;
+
+> Ou, alternativamente, basta executar o seguinte comando para executar todos eles sequencialmente
+> ```fish
+> make tests
+> ```
