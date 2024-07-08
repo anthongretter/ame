@@ -1,3 +1,17 @@
+#
+#   COMPILADOR DA LINGUAGEM AME (BASEADA EM X++ - src/resources/ConvCC-2024-1.txt)
+#   DISCIPLINA INE5426 - CONSTRUÇÃO DE COMPILADORES - 2024/1
+#   
+#   Autores: 
+#   A - Anthon Porath Gretter (20204787)
+#   M - Matheus Antonio de Souza (21203363)
+#   E - Eduardo de Moraes (19203167)
+#
+#   MODIFICAÇÕES DA GRAMÁTICA:
+#   1 - Toda chamada de função é precedida pela palavra reservada "call" - Ex: x = call funcao(parametro);
+#   2 - Todo return deve retornar um identificador - Ex: return x;
+#
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -6,23 +20,6 @@ from src.utils import Singleton
 from src.lex.lexicalstructs import SymbolTable
 import src.lex.lexer as lexer
 from ply.lex import LexToken
-
-
-# class ResultadoSemantica(Enum):
-#     SUCESSO = 0
-#     ERRO_MISMATCH = 1
-#     SUCESSO = 2
-
-class ExpTree(metaclass=Singleton):
-
-    def __init__(self):
-        self.reset()
-
-    def reset(self):
-        self.d = {}
-        self.p = None
-
-
 
 
 @dataclass
@@ -38,10 +35,24 @@ class Node:
             return_string.extend(["\n", " " * (depth+1), child.__repr__(depth+1)])
         return "".join(return_string)
     
+    def __check_state(self, types_f: set, mag: int, ct: LexToken):
+        if len(types_f) > 1:
+            if "string" in types_f:
+                # error mismatch
+                raise Exception(f"Operacao com tipos incompativeis em {ct.value} linha {ct.lineno} coluna {ct.lexpos}")
+            elif "float" in types_f and SymbolTable().get(self.left.vallex).datatype != "float":
+                # error x (int) = 4.3 + 2 (float)
+                raise Exception(f"esperado int, mas obteve float em {ct.value} linha {ct.lineno} coluna {ct.lexpos}")
+        if ct.magnitude != mag:
+            raise Exception(f"Operacao dimensoes de arrays com {ct.value} linha {ct.lineno} coluna {ct.lexpos}")
+            
+    
     def validate_datatype(self):
         types_found = set()
         queue = [self]
-        print("Analisando a seguinte arvore de expressao...")
+        mag = None
+
+        print(f"Analisando a seguinte arvore de expressao:")
         print(self)
         print()
 
@@ -60,20 +71,16 @@ class Node:
                 
                 ident = SymbolTable().get(child.vallex.value)
                 child.vallex = ident
+                
+                if mag == None:
+                    mag = ident.magnitude
 
                 types_found.add(child.vallex.datatype)
+                self.__check_state(types_found, mag, child.vallex)
                 queue.append(child)
         
-        if len(types_found) > 1:
-            if "string" in types_found:
-                # error mismatch
-                raise Exception("Operacao com tipos incompativeis")
-            elif "float" in types_found and SymbolTable().get(self.left.vallex).datatype != "float":
-                # error x (int) = 4.3 + 2 (float)
-                raise Exception("esperado int, mas obteve float")
-        else:
-            print("Aprovada")
-            print()
+        print("Arvore aprovada")
+        print()
 
 
 class PilhaEscopoBreak(metaclass=Singleton):
@@ -98,7 +105,7 @@ if __name__ == "__main__":
 
 class PilhaEscopoVariaveis(metaclass=Singleton):
     def __init__(self):
-        self.pilha = []
+        self.pilha = [[]]
     
     def fim_escopo(self):
         self.pilha.pop()

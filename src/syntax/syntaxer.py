@@ -1,4 +1,16 @@
-import pprint
+#
+#   COMPILADOR DA LINGUAGEM AME (BASEADA EM X++ - src/resources/ConvCC-2024-1.txt)
+#   DISCIPLINA INE5426 - CONSTRUÇÃO DE COMPILADORES - 2024/1
+#   
+#   Autores: 
+#   A - Anthon Porath Gretter (20204787)
+#   M - Matheus Antonio de Souza (21203363)
+#   E - Eduardo de Moraes (19203167)
+#
+#   MODIFICAÇÕES DA GRAMÁTICA:
+#   1 - Toda chamada de função é precedida pela palavra reservada "call" - Ex: x = call funcao(parametro);
+#   2 - Todo return deve retornar um identificador - Ex: return x;
+#
 from ply.lex import LexToken
 from enum import Enum
 
@@ -10,6 +22,7 @@ class ResultadoAnalise(Enum):
     ERRO_TERMINAL = 0
     ERRO_NAO_TERMINAL = 1
     SUCESSO = 2
+    ERRO_GERAL = 3
 
 class NaoTerminal(metaclass=SingletonSymbol):
     def __init__(self, nome):
@@ -63,8 +76,6 @@ class Syntaxer(metaclass=Singleton):
         self.pilha.append(NaoTerminal('PROGRAM'))
         self.tabela = self.gerar_tabela(tabela)
 
-        # print(self)
-
     def gerar_tabela(self, tabela_ll1):
         # TABELA
         tabela = {}
@@ -82,8 +93,6 @@ class Syntaxer(metaclass=Singleton):
                         aux.append(SemanticAction(elemento, None))
                     elif elemento.isupper():
                         aux.append(NaoTerminal(elemento))
-                        # pprint.pprint(SingletonSymbol._instances, indent=4)
-                        # input()
                     else:
                         aux.append(Terminal(elemento))
                 
@@ -97,6 +106,10 @@ class Syntaxer(metaclass=Singleton):
         return tabela
         
     def __str__(self):
+        tabela_str = self.repr_tabela()
+        return f'Pilha: {self.pilha}\nEntrada: {self.entrada}\nTabela: {tabela_str}'
+
+    def repr_tabela(self) -> str:
         tabela_str = ""
         for cabeca in self.tabela.keys():
             tabela_str += f"[{cabeca}]\n"
@@ -106,7 +119,7 @@ class Syntaxer(metaclass=Singleton):
                 tabela_str += f" >'{cauda}' -> {self.tabela[cabeca][cauda].cauda}"
                 tabela_str += "\n"
             tabela_str += "\n"
-        return f'Pilha: {self.pilha}\nEntrada: {self.entrada}\nTabela: {tabela_str}'
+        return tabela_str
 
     def empilha(self, simbolo):
         self.pilha.append(simbolo)
@@ -124,53 +137,58 @@ class Syntaxer(metaclass=Singleton):
         return self.entrada[self.index]
 
     def analise(self) -> ResultadoAnalise:
-        while True:
-            X = self.topo_pilha()
-            a = self.topo_entrada()
-            # print('-----------')
-            # print(f'pilha: {self.pilha}')
-            # print(f'token: {a}')
-            # input()
-            if isinstance(X, Terminal):
-                if X.nome == a.type.lower():
-                    if X.nome == '$':
-                        break
-                    else:
-                        self.desempilha()
-                        self.consome_entrada()
-                elif X.nome == '&':
-                    self.desempilha()
-                else:
-                    print(f'Erro ao ler o token {a.value} na linha {a.lineno} e coluna {a.lexpos}! (Terminal)')
-                    return ResultadoAnalise.ERRO_TERMINAL
-                
-            elif isinstance(X, NaoTerminal):
-                if a.type.lower() in self.tabela[X.nome]:
-                    # print(f'Empilhando {self.tabela[X.nome][a.type.lower()]}')
-                    self.desempilha()
-
-                    # TODO verificar isso
-                    if self.tabela[X.nome][a.type.lower()].cauda == []:
-                        print(f'Erro ao ler o token {a.value} na linha {a.lineno} e coluna {a.lexpos}! (NaoTerminal - Empilhando vazio)')
-                        return ResultadoAnalise.ERRO_NAO_TERMINAL
-                    
-                    for i in self.tabela[X.nome][a.type.lower()].cauda[::-1]:
-                        self.empilha(i)
-                else:
-                    print(f'Erro ao ler o token {a.value} na linha {a.lineno} e coluna {a.lexpos}! (NaoTerminal)')
-                    return ResultadoAnalise.ERRO_NAO_TERMINAL
-            elif isinstance(X, SemanticAction):
-                # print(X.args)
-                # print(self.entrada[self.index])
-                # print("HIST:", self.entrada[0:self.index+1][::-1])
+        # try:
+            while True:
+                X = self.topo_pilha()
+                a = self.topo_entrada()
+                # print('-----------')
+                # print(f'pilha: {self.pilha}')
+                # print(f'token: {a}')
                 # input()
-                X.func(X.args, self.entrada[0:self.index+1][::-1])
-                self.desempilha()
-            else:
-                raise Exception(f'Erro (OBJETO NA PILHA NÃO RECONHECIDO) {X}')
-        
-        # print(NaoTerminal("NUMEXPRESSION").attrs['node'])
-        return ResultadoAnalise.SUCESSO
+                if isinstance(X, Terminal):
+                    if X.nome == a.type.lower():
+                        if X.nome == '$':
+                            break
+                        else:
+                            self.desempilha()
+                            self.consome_entrada()
+                    elif X.nome == '&':
+                        self.desempilha()
+                    else:
+                        print(f'Terminal {a.value} inesperado na linha {a.lineno} e coluna {a.lexpos}:\n>> Esperava-se {X.nome}')
+                        return ResultadoAnalise.ERRO_TERMINAL
+                    
+                elif isinstance(X, NaoTerminal):
+                    if a.type.lower() in self.tabela[X.nome]:
+                        # print(f'Empilhando {self.tabela[X.nome][a.type.lower()]}')
+                        self.desempilha()
+
+                        # TODO verificar isso
+                        if self.tabela[X.nome][a.type.lower()].cauda == []:
+                            print(f'Construcao {a.value} inesperada na linha {a.lineno} e coluna {a.lexpos}! (NaoTerminal - Empilhando vazio)')
+                            return ResultadoAnalise.ERRO_NAO_TERMINAL
+                        
+                        for i in self.tabela[X.nome][a.type.lower()].cauda[::-1]:
+                            self.empilha(i)
+                    else:
+                        print(f'Construcao {a.value} inesperada na linha {a.lineno} e coluna {a.lexpos}! (NaoTerminal)')
+                        return ResultadoAnalise.ERRO_NAO_TERMINAL
+                elif isinstance(X, SemanticAction):
+                    # print(X.args)
+                    # print(self.entrada[self.index])
+                    # print("HIST:", self.entrada[0:self.index+1][::-1])
+                    # input()
+                    X.func(X.args, self.entrada[0:self.index+1][::-1])
+                    self.desempilha()
+                else:
+                    raise Exception(f'Erro (OBJETO NA PILHA NÃO RECONHECIDO) {X}')
+            
+            # print(NaoTerminal("NUMEXPRESSION").attrs['node'])
+            return ResultadoAnalise.SUCESSO
+        # except Exception as e:
+            
+        #     print("ERRO: " + str(e))
+        #     return ResultadoAnalise.ERRO_GERAL
 
 # M = {}
 # M['PROGRAM']['def'] = [acaosemantica1, funclist_nt]

@@ -1,4 +1,16 @@
-import pprint
+#
+#   COMPILADOR DA LINGUAGEM AME (BASEADA EM X++ - src/resources/ConvCC-2024-1.txt)
+#   DISCIPLINA INE5426 - CONSTRUÇÃO DE COMPILADORES - 2024/1
+#   
+#   Autores: 
+#   A - Anthon Porath Gretter (20204787)
+#   M - Matheus Antonio de Souza (21203363)
+#   E - Eduardo de Moraes (19203167)
+#
+#   MODIFICAÇÕES DA GRAMÁTICA:
+#   1 - Toda chamada de função é precedida pela palavra reservada "call" - Ex: x = call funcao(parametro);
+#   2 - Todo return deve retornar um identificador - Ex: return x;
+#
 
 from src.semantic.actions import DEC, EXPA, BREAK, ESCOPOVAR
 
@@ -413,6 +425,7 @@ TABELA: dict = {   'ALLOCAUX': {   '$': '-',
                    'float_constant': '-',
                    'for': (   'for',
                               'lparen',
+                              ESCOPOVAR.a,
                               'ATRIBSTAT',
                               'semicolumn',
                               'EXPRESSION',
@@ -421,6 +434,7 @@ TABELA: dict = {   'ALLOCAUX': {   '$': '-',
                               'rparen',
                               BREAK.a,
                               'STATEMENT',
+                              ESCOPOVAR.b,
                               BREAK.b),
                    'greater': '-',
                    'greaterequal': '-',
@@ -672,7 +686,7 @@ TABELA: dict = {   'ALLOCAUX': {   '$': '-',
                      'def': '-',
                      'diff': '-',
                      'divide': '-',
-                     'else': ('else', 'STATEMENT'),
+                     'else': ('else', ESCOPOVAR.a, 'STATEMENT', ESCOPOVAR.b),
                      'equal': '-',
                      'float': '-',
                      'float_constant': '-',
@@ -1496,14 +1510,14 @@ TABELA: dict = {   'ALLOCAUX': {   '$': '-',
                    'divide': '-',
                    'else': '-',
                    'equal': '-',
-                   'float': ('float', DEC.c, 'ident', 'DECAUX', DEC.d),
+                   'float': ('float', DEC.c, ESCOPOVAR.c, 'ident', 'DECAUX', DEC.d),
                    'float_constant': '-',
                    'for': '-',
                    'greater': '-',
                    'greaterequal': '-',
                    'ident': '-',
                    'if': '-',
-                   'int': ('int', DEC.a, 'ident', 'DECAUX', DEC.b),
+                   'int': ('int', DEC.a, ESCOPOVAR.c, 'ident', 'DECAUX', DEC.b),
                    'int_constant': '-',
                    'lbrace': '-',
                    'lbracket': '-',
@@ -1522,7 +1536,7 @@ TABELA: dict = {   'ALLOCAUX': {   '$': '-',
                    'return': '-',
                    'rparen': '-',
                    'semicolumn': '-',
-                   'string': ('string', DEC.e, 'ident', 'DECAUX', DEC.f),
+                   'string': ('string', DEC.e, ESCOPOVAR.c, 'ident', 'DECAUX', DEC.f),
                    'string_constant': '-',
                    'times': '-'}
     }

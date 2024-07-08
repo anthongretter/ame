@@ -1,3 +1,16 @@
+#
+#   COMPILADOR DA LINGUAGEM AME (BASEADA EM X++ - src/resources/ConvCC-2024-1.txt)
+#   DISCIPLINA INE5426 - CONSTRUÇÃO DE COMPILADORES - 2024/1
+#   
+#   Autores: 
+#   A - Anthon Porath Gretter (20204787)
+#   M - Matheus Antonio de Souza (21203363)
+#   E - Eduardo de Moraes (19203167)
+#
+#   MODIFICAÇÕES DA GRAMÁTICA:
+#   1 - Toda chamada de função é precedida pela palavra reservada "call" - Ex: x = call funcao(parametro);
+#   2 - Todo return deve retornar um identificador - Ex: return x;
+#
 from src.lex.lexer import reserved
 from src.lex.lexicalstructs import SymbolTable
 from src.semantic.semanticstructs import Node, PilhaEscopoBreak, PilhaEscopoVariaveis
@@ -247,16 +260,17 @@ class BREAK:
     def b(l, t_anteriores):
         pilha = PilhaEscopoBreak()
         try:
-            pilha.pop() # Se falhar, erro de sintaxe (nao tem fechamento de loop)
+            pilha.pop() # Se falhar, erro de sintaxe (nao tem fechamento de loop, nao deveria acontecer em etapa semantica)
         except:
-            raise Exception("Erro sintático, loop for fechado sem ser aberto")
+            raise Exception(f'Na linha {t_anteriores[0].lineno} e coluna {t_anteriores[0].lexpos}:\n>> Fechamento de escopo de FOR sem abertura.')
+
 
     @staticmethod
     def c(l, t_anteriores):
         pilha = PilhaEscopoBreak()
         if not pilha.peek():
             # Se falhar, erro semantico
-            raise Exception("break fora de escopo")
+            raise Exception(f'"break" na linha {t_anteriores[0].lineno} e coluna {t_anteriores[0].lexpos}:\n>> "break" fora de escopo de um for.')
 
 class ESCOPOVAR:
     @staticmethod
@@ -273,5 +287,4 @@ class ESCOPOVAR:
     def c(l,  t_anteriores):
         pilha = PilhaEscopoVariaveis()
         if pilha.insert(t_anteriores[0].value):
-            raise Exception(f'{t_anteriores[0].value} Já foi definido no escopo')
-        
+            raise Exception(f'{t_anteriores[0].value} na linha {t_anteriores[0].lineno} coluna {t_anteriores[0].lexpos}:\nIdentificador já declarado em escopo.')

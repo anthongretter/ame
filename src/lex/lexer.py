@@ -1,3 +1,16 @@
+#
+#   COMPILADOR DA LINGUAGEM AME (BASEADA EM X++ - src/resources/ConvCC-2024-1.txt)
+#   DISCIPLINA INE5426 - CONSTRUÇÃO DE COMPILADORES - 2024/1
+#   
+#   Autores: 
+#   A - Anthon Porath Gretter (20204787)
+#   M - Matheus Antonio de Souza (21203363)
+#   E - Eduardo de Moraes (19203167)
+#
+#   MODIFICAÇÕES DA GRAMÁTICA:
+#   1 - Toda chamada de função é precedida pela palavra reservada "call" - Ex: x = call funcao(parametro);
+#   2 - Todo return deve retornar um identificador - Ex: return x;
+#
 import ply.lex as lex
 
 SEPS = {'+', '-', '*', '/', '%', '=', '==', '!=', '>', '<', '>=', '<=',
@@ -101,8 +114,8 @@ def t_newline(t):
     t.lexer.linestart = t.lexer.lexpos
 
 def t_error(t):
-    print(f"Caractere {t.value[0]} desconhecido em {t.lexer.lineno},{t.lexer.lexpos - t.lexer.linestart + 1}")
-
+    print(f"ERRO: Caractere {t.value[0]} desconhecido na linha {t.lexer.lineno} coluna {t.lexer.lexpos - t.lexer.linestart + 1}")
+    quit()
 
 lexer = lex.lex()
 lexer.linestart = 0
