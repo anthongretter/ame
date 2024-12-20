@@ -6,74 +6,70 @@
 
 ---
 
-### Objetivos
+### Objectives
 
-O objetivo deste projeto é realizar a implementação de um compilador para a linguagem 
-AME, uma linguagem de programação de alto nível. O desenvolvimento consiste na construção de:
+The goal of this project is to implement a compiler for the AME language, a high-level programming language. The development consists of building:
 
-- Analisador Léxico (AL);
-- Analisador Sintático (AS);
-- Analisador Semântico (ASem);
-- Gerador de Código Intermediário (GCI).
+- Lexical Analyzer (LA);
+- Syntax Analyzer (SA);
+- Semantic Analyzer (SAn);
+- Intermediate Code Generator (ICG).
 
-Este trabalho faz parte do plano de ensino da disciplina de Construção de Compiladores 
-(INE5426), ministrado pelo prof. Alvaro Junio Pereira Franco.
+This work is part of the syllabus for the Compiler Construction course (INE5426), taught by Prof. Alvaro Junio Pereira Franco.
 
-### Estrutura do Projeto
+### Project Structure
 
-A organização do código é bem simples:
-- A execução dos analisadores é centralizada em `main.py`;
-- `src/lexer` fica o código pertinente ao AL; 
-- `src/syntax` está o código pertinente ao AS; 
-- `src/semantic` é onde está o código pertinente ao ASem;
-- `src/test` contém os arquivos `.ame` a serem testados; 
-- `src/resources`, por sua vez, estão localizados arquivos de textos que descrevem as
-SDDs e SDTs do projeto, e a gramática da linguagem.
+The code organization is very simple:
+- The execution of the analyzers is centralized in `main.py`;
+- `src/lexer` contains the code related to the LA;
+- `src/syntax` contains the code related to the SA;
+- `src/semantic` contains the code related to the SAn;
+- `src/test` contains the `.ame` files to be tested;
+- `src/resources` contains text files that describe the SDDs and SDTs of the project, and the language grammar.
 
-### Dependências
+### Dependencies
 
 - make;
 - Python >= 3.10;
   - pip;
   - venv;
   - ply.
-- Versão da biblioteca mencionada contra-se listada no arquivo de dependências `requirements.txt`.
+- The version of the mentioned library is listed in the `requirements.txt` file.
 
-### Instalação
+### Installation
 
-Para instalar as dependências do projeto, basta executar o comando abaixo:
+To install the project dependencies, run the command below:
 
 ```fish
 make install
 ```
 
-> Caso dê algum problema com o uso do venv, é recomendado deletar a pasta `venv`
-na raiz do projeto e executar o comando novamente.
+> If you encounter issues with venv, it is recommended to delete the `venv` folder in the root of the project and run the command again.
 
-### Execução
+### Execution
 
-Para executar o projeto após instalação, basta executar o comando abaixo:
+To run the project after installation, execute the command below:
 
 ```fish
 make run FILE=path/to/file.ame
 ```
 
-Onde `path/to/file.ame` é o caminho para o arquivo `.ame` a ser analisado.
+Where `path/to/file.ame` is the path to the `.ame` file to be analyzed.
 
-### Execução de testes
+### Test Execution
 
-O projeto possui testes prontos, para executá-los basta executar o comando abaixo:
+The project includes ready-to-use tests. To execute them, run the command below:
 
 ```fish
 make desired_test
 ```
 
-Onde `desired_test` é o teste desejado. Os testes disponíveis são:
-- `test1`: testa o arquivo `merge.ame`;
-- `test2`: testa o arquivo `primo.ame`;
-- `test3`: testa o arquivo `adivinha.ame`;
+Where `desired_test` is the desired test. The available tests are:
+- `test1`: tests the `merge.ame` file;
+- `test2`: tests the `primo.ame` file;
+- `test3`: tests the `adivinha.ame` file;
 
-> Ou, alternativamente, basta executar o seguinte comando para executar todos eles sequencialmente
+> Alternatively, you can run the following command to execute all of them sequentially:
 > ```fish
 > make tests
 > ```
